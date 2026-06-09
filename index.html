@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sistema de Campaña</title>
+  <meta property="og:title" content="Sistema de Campaña" />
+  <meta property="og:description" content="Coordinación de campaña política" />
+  <meta property="og:image" content="https://mty-azul.com/Logo/nano-logo.png" />
+  <meta property="og:url" content="https://mty-azul.com" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://mty-azul.com/Logo/nano-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -3262,7 +3269,7 @@ function AssetsView() {
 }
 
 function Login({ onLogin }) {
-  const [mode, setMode]   = useState('login'); // 'login' | 'signup' | 'done'
+  const [mode, setMode]   = useState('pick'); // 'pick' | 'login' | 'signup' | 'done'
   const [email, setEmail] = useState('');
   const [pass, setPass]   = useState('');
   const [pass2, setPass2] = useState('');
@@ -3288,25 +3295,49 @@ function Login({ onLogin }) {
 
   const inputStyle = {width:'100%',boxSizing:'border-box',border:'1px solid #ddd',borderRadius:7,padding:'9px 12px',fontSize:'.9rem',fontFamily:'Quicksand,sans-serif',outline:'none'};
 
+  const cardWrap = {minHeight:'100vh',background:'#f7f7f7',display:'flex',alignItems:'center',justifyContent:'center'};
+  const card = {background:'#fff',borderRadius:12,padding:'40px 36px',width:360,boxShadow:'0 2px 24px rgba(0,0,0,.08)',textAlign:'center'};
+  const logoEl = <img src="Logo/nano-logo.png" alt="Logo" style={{height:56,marginBottom:28,display:'block',margin:'0 auto 28px'}} />;
+
+  if (mode === 'pick') return (
+    <div style={cardWrap}>
+      <div style={card}>
+        {logoEl}
+        <div style={{display:'flex',gap:12,marginTop:8}}>
+          <button onClick={()=>setMode('login')}
+            style={{flex:1,background:'#fff',color:'#0a0a0a',border:'1.5px solid #ddd',borderRadius:8,padding:'12px',fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'.95rem',cursor:'pointer'}}>
+            Iniciar sesión
+          </button>
+          <button onClick={()=>setMode('signup')}
+            style={{flex:1,background:'#e8e8e8',color:'#444',border:'1.5px solid #e8e8e8',borderRadius:8,padding:'12px',fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'.95rem',cursor:'pointer'}}>
+            Registrarse
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   if (mode === 'done') return (
-    <div style={{minHeight:'100vh',background:'#f7f7f7',display:'flex',alignItems:'center',justifyContent:'center'}}>
-      <div style={{background:'#fff',borderRadius:12,padding:'40px 36px',width:360,boxShadow:'0 2px 24px rgba(0,0,0,.08)',textAlign:'center'}}>
+    <div style={cardWrap}>
+      <div style={card}>
+        {logoEl}
         <div style={{fontSize:'2rem',marginBottom:12}}>✉️</div>
         <div style={{fontWeight:700,fontSize:'1.1rem',marginBottom:8}}>Revisa tu correo</div>
         <div style={{color:'#888',fontSize:'.85rem',lineHeight:1.6,marginBottom:24}}>Te enviamos un link de confirmación a <strong>{email}</strong>. Haz clic en él para activar tu cuenta.</div>
-        <button onClick={()=>{ setMode('login'); setErr(''); setPass(''); setPass2(''); }}
+        <button onClick={()=>{ setMode('pick'); setErr(''); setPass(''); setPass2(''); }}
           style={{background:'none',border:'none',color:'#0a0a0a',fontSize:'.85rem',fontWeight:600,cursor:'pointer',textDecoration:'underline'}}>
-          Volver al login
+          Volver al inicio
         </button>
       </div>
     </div>
   );
 
   return (
-    <div style={{minHeight:'100vh',background:'#f7f7f7',display:'flex',alignItems:'center',justifyContent:'center'}}>
-      <div style={{background:'#fff',borderRadius:12,padding:'40px 36px',width:360,boxShadow:'0 2px 24px rgba(0,0,0,.08)'}}>
-        <div style={{marginBottom:28,textAlign:'center'}}>
-          <div style={{fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'1.3rem',color:'#0a0a0a',letterSpacing:'-.02em'}}>
+    <div style={cardWrap}>
+      <div style={{...card, textAlign:'left'}}>
+        {logoEl}
+        <div style={{marginBottom:24}}>
+          <div style={{fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'1.2rem',color:'#0a0a0a',letterSpacing:'-.02em'}}>
             {mode === 'login' ? 'Acceso' : 'Crear cuenta'}
           </div>
           <div style={{color:'#888',fontSize:'.82rem',marginTop:4}}>
