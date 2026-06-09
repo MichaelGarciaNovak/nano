@@ -3262,43 +3262,84 @@ function AssetsView() {
 }
 
 function Login({ onLogin }) {
+  const [mode, setMode]   = useState('login'); // 'login' | 'signup' | 'done'
   const [email, setEmail] = useState('');
   const [pass, setPass]   = useState('');
+  const [pass2, setPass2] = useState('');
   const [err, setErr]     = useState('');
   const [busy, setBusy]   = useState(false);
 
   async function submit(e) {
     e.preventDefault(); setErr(''); setBusy(true);
-    const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-    setBusy(false);
-    if (error) setErr(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
-    else onLogin();
+    if (mode === 'login') {
+      const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+      setBusy(false);
+      if (error) setErr(error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message);
+      else onLogin();
+    } else {
+      if (pass !== pass2) { setErr('Las contraseñas no coinciden.'); setBusy(false); return; }
+      if (pass.length < 6) { setErr('La contraseña debe tener al menos 6 caracteres.'); setBusy(false); return; }
+      const { error } = await sb.auth.signUp({ email, password: pass });
+      setBusy(false);
+      if (error) setErr(error.message);
+      else setMode('done');
+    }
   }
+
+  const inputStyle = {width:'100%',boxSizing:'border-box',border:'1px solid #ddd',borderRadius:7,padding:'9px 12px',fontSize:'.9rem',fontFamily:'Quicksand,sans-serif',outline:'none'};
+
+  if (mode === 'done') return (
+    <div style={{minHeight:'100vh',background:'#f7f7f7',display:'flex',alignItems:'center',justifyContent:'center'}}>
+      <div style={{background:'#fff',borderRadius:12,padding:'40px 36px',width:360,boxShadow:'0 2px 24px rgba(0,0,0,.08)',textAlign:'center'}}>
+        <div style={{fontSize:'2rem',marginBottom:12}}>✉️</div>
+        <div style={{fontWeight:700,fontSize:'1.1rem',marginBottom:8}}>Revisa tu correo</div>
+        <div style={{color:'#888',fontSize:'.85rem',lineHeight:1.6,marginBottom:24}}>Te enviamos un link de confirmación a <strong>{email}</strong>. Haz clic en él para activar tu cuenta.</div>
+        <button onClick={()=>{ setMode('login'); setErr(''); setPass(''); setPass2(''); }}
+          style={{background:'none',border:'none',color:'#0a0a0a',fontSize:'.85rem',fontWeight:600,cursor:'pointer',textDecoration:'underline'}}>
+          Volver al login
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div style={{minHeight:'100vh',background:'#f7f7f7',display:'flex',alignItems:'center',justifyContent:'center'}}>
       <div style={{background:'#fff',borderRadius:12,padding:'40px 36px',width:360,boxShadow:'0 2px 24px rgba(0,0,0,.08)'}}>
         <div style={{marginBottom:28,textAlign:'center'}}>
-          <div style={{fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'1.3rem',color:'#0a0a0a',letterSpacing:'-.02em'}}>Acceso</div>
-          <div style={{color:'#888',fontSize:'.82rem',marginTop:4}}>Ingresa con tu cuenta</div>
+          <div style={{fontFamily:'Quicksand,sans-serif',fontWeight:700,fontSize:'1.3rem',color:'#0a0a0a',letterSpacing:'-.02em'}}>
+            {mode === 'login' ? 'Acceso' : 'Crear cuenta'}
+          </div>
+          <div style={{color:'#888',fontSize:'.82rem',marginTop:4}}>
+            {mode === 'login' ? 'Ingresa con tu cuenta' : 'Regístrate para acceder'}
+          </div>
         </div>
         <form onSubmit={submit}>
           <div style={{marginBottom:14}}>
             <label style={{display:'block',fontSize:'.75rem',fontWeight:600,color:'#444',marginBottom:5,letterSpacing:'.04em',textTransform:'uppercase'}}>Correo</label>
-            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required
-              style={{width:'100%',boxSizing:'border-box',border:'1px solid #ddd',borderRadius:7,padding:'9px 12px',fontSize:'.9rem',fontFamily:'Quicksand,sans-serif',outline:'none'}} />
+            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} required style={inputStyle} />
           </div>
-          <div style={{marginBottom:22}}>
+          <div style={{marginBottom: mode==='signup' ? 14 : 22}}>
             <label style={{display:'block',fontSize:'.75rem',fontWeight:600,color:'#444',marginBottom:5,letterSpacing:'.04em',textTransform:'uppercase'}}>Contraseña</label>
-            <input type="password" value={pass} onChange={e=>setPass(e.target.value)} required
-              style={{width:'100%',boxSizing:'border-box',border:'1px solid #ddd',borderRadius:7,padding:'9px 12px',fontSize:'.9rem',fontFamily:'Quicksand,sans-serif',outline:'none'}} />
+            <input type="password" value={pass} onChange={e=>setPass(e.target.value)} required style={inputStyle} />
           </div>
+          {mode === 'signup' && (
+            <div style={{marginBottom:22}}>
+              <label style={{display:'block',fontSize:'.75rem',fontWeight:600,color:'#444',marginBottom:5,letterSpacing:'.04em',textTransform:'uppercase'}}>Confirmar contraseña</label>
+              <input type="password" value={pass2} onChange={e=>setPass2(e.target.value)} required style={inputStyle} />
+            </div>
+          )}
           {err && <div style={{background:'#fff0f0',color:'#c00',borderRadius:6,padding:'8px 12px',fontSize:'.8rem',marginBottom:14}}>{err}</div>}
           <button type="submit" disabled={busy}
             style={{width:'100%',background:'#0a0a0a',color:'#fff',border:'none',borderRadius:7,padding:'11px',fontFamily:'Quicksand,sans-serif',fontWeight:600,fontSize:'.9rem',cursor:busy?'not-allowed':'pointer',opacity:busy?.6:1}}>
-            {busy ? 'Entrando...' : 'Entrar'}
+            {busy ? (mode==='login' ? 'Entrando...' : 'Creando cuenta...') : (mode==='login' ? 'Entrar' : 'Crear cuenta')}
           </button>
         </form>
+        <div style={{textAlign:'center',marginTop:18,fontSize:'.82rem',color:'#888'}}>
+          {mode === 'login'
+            ? <span>¿No tienes cuenta? <button onClick={()=>{setMode('signup');setErr('');}} style={{background:'none',border:'none',color:'#0a0a0a',fontWeight:600,cursor:'pointer',fontSize:'.82rem',fontFamily:'Quicksand,sans-serif',padding:0}}>Regístrate</button></span>
+            : <span>¿Ya tienes cuenta? <button onClick={()=>{setMode('login');setErr('');}} style={{background:'none',border:'none',color:'#0a0a0a',fontWeight:600,cursor:'pointer',fontSize:'.82rem',fontFamily:'Quicksand,sans-serif',padding:0}}>Inicia sesión</button></span>
+          }
+        </div>
       </div>
     </div>
   );
