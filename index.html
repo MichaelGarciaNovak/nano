@@ -2160,17 +2160,11 @@ function MemberCard({ member, onUpdate, onDelete }) {
         <div className="ced-row">
           <div>
             <div className="ced-label">Rol</div>
-            <select className="ced-select" value={form.rol||''} onChange={e=>f('rol',e.target.value)}>
-              <option value="">Rol…</option>
-              {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
-            </select>
+            <input className="ced-input" value={form.rol||''} onChange={e=>f('rol',e.target.value)} placeholder="Ej. Coordinador" />
           </div>
           <div>
             <div className="ced-label">Especialidad</div>
-            <select className="ced-select" value={form.especialidad||''} onChange={e=>f('especialidad',e.target.value)}>
-              <option value="">Especialidad…</option>
-              {ESPECIALIDADES.map(e=><option key={e} value={e}>{e}</option>)}
-            </select>
+            <input className="ced-input" value={form.especialidad||''} onChange={e=>f('especialidad',e.target.value)} placeholder="Ej. Digital" />
           </div>
         </div>
         <div><div className="ced-label">Correo</div><input className="ced-input" value={form.correo||''} onChange={e=>f('correo',e.target.value)} placeholder="correo@ejemplo.com" /></div>
@@ -2251,17 +2245,11 @@ function AddCard({ onAdd }) {
         <div className="ced-row">
           <div>
             <div className="ced-label">Rol</div>
-            <select className="ced-select" value={form.rol} onChange={e=>f('rol',e.target.value)}>
-              <option value="">Rol…</option>
-              {ROLES.map(r=><option key={r} value={r}>{r}</option>)}
-            </select>
+            <input className="ced-input" value={form.rol} onChange={e=>f('rol',e.target.value)} placeholder="Ej. Coordinador" />
           </div>
           <div>
             <div className="ced-label">Especialidad</div>
-            <select className="ced-select" value={form.especialidad} onChange={e=>f('especialidad',e.target.value)}>
-              <option value="">Especialidad…</option>
-              {ESPECIALIDADES.map(e=><option key={e} value={e}>{e}</option>)}
-            </select>
+            <input className="ced-input" value={form.especialidad} onChange={e=>f('especialidad',e.target.value)} placeholder="Ej. Digital" />
           </div>
         </div>
         <div><div className="ced-label">Correo</div><input className="ced-input" value={form.correo} onChange={e=>f('correo',e.target.value)} placeholder="correo@ejemplo.com" /></div>
