@@ -68,6 +68,7 @@
       display: flex;
       align-items: center;
       gap: 20px;
+      margin-left: auto;
     }
     .topnav-link {
       font-size: 1.56rem;
@@ -2105,9 +2106,9 @@ function initials(n) {
 
 /* ── Avatar palette — one color per person ── */
 const AVATAR_COLORS = [
-  ['#1a1a2e','#fff'],['#16213e','#fff'],['#0f3460','#fff'],['#533483','#fff'],
-  ['#2b4162','#fff'],['#385170','#fff'],['#1b4332','#fff'],['#2d6a4f','#fff'],
-  ['#7b2d00','#fff'],['#6d2b3d','#fff'],['#3d405b','#fff'],['#264653','#fff'],
+  ['#ffd166','#000'],['#06d6a0','#000'],['#118ab2','#fff'],['#ef476f','#fff'],
+  ['#f4a261','#000'],['#a8dadc','#000'],['#c77dff','#000'],['#80b918','#000'],
+  ['#ff6b6b','#fff'],['#4cc9f0','#000'],['#f72585','#fff'],['#b5e48c','#000'],
 ];
 function avatarColor(name) {
   if (!name) return AVATAR_COLORS[0];
@@ -3653,7 +3654,6 @@ function App() {
             Equipo
           </span>
           <span className={`topnav-link ${view==='assets'?'active':''}`} onClick={()=>setView('assets')}>Assets</span>
-          {view==='equipo'   && <span style={{fontSize:'.72rem',color:'var(--gray-4)',fontWeight:300}}>doble clic para editar</span>}
         </div>
         <button onClick={async()=>{ await sb.auth.signOut(); }} style={{background:'none',border:'1px solid rgba(255,255,255,.25)',borderRadius:6,color:'rgba(255,255,255,.7)',fontSize:'.72rem',padding:'4px 10px',cursor:'pointer',marginRight:8,letterSpacing:'.04em'}}>Salir</button>
         <button className={`hamburger ${menuOpen?'open':''}`} onClick={()=>setMenuOpen(o=>!o)} aria-label="Menú">
