@@ -3747,15 +3747,6 @@ function App() {
               onMouseLeave={e=>{e.target.style.background='transparent';e.target.style.color='var(--gray-2)';e.target.style.borderColor='var(--gray-4)'}}>
               Importar CSV
             </button>
-            <button onClick={()=>{ if(!window.confirm('¿Borrar todas las colonias? Esta acción no se puede deshacer.')) return; sb.from('colonias').delete().neq('id','__none__').then(); setColonias([]); setLoaded(false); }}
-              style={{fontFamily:"'Quicksand',sans-serif",fontSize:'.75rem',fontWeight:600,
-                padding:'4px 14px',borderRadius:20,border:'1px solid #ffbdbd',
-                background:'transparent',color:'#e05555',cursor:'pointer',
-                letterSpacing:'.02em',transition:'all .15s',whiteSpace:'nowrap'}}
-              onMouseEnter={e=>{e.target.style.background='#e05555';e.target.style.color='#fff';e.target.style.borderColor='#e05555'}}
-              onMouseLeave={e=>{e.target.style.background='transparent';e.target.style.color='#e05555';e.target.style.borderColor='#ffbdbd'}}>
-              Borrar todo
-            </button>
 
           </div>
         </div>
