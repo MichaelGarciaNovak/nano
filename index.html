@@ -2037,7 +2037,34 @@ function ColoniaRow({ col, onUpdate, team }) {
             </div>
             <div className="tab-panel">
               {tab==='datos' && (
-              <div></div>
+              <div style={{padding:'4px 0 8px'}}>
+                {(()=>{
+                  const match = (typeof RESUMEN_DATA !== 'undefined') &&
+                    RESUMEN_DATA.find(r => r.Colonia && nombre &&
+                      r.Colonia.toLowerCase().trim() === nombre.toLowerCase().trim());
+                  if (!match) return (
+                    <p style={{color:'var(--gray-4)',fontSize:'.8rem',padding:'8px 0'}}>Sin datos de resumen para esta colonia.</p>
+                  );
+                  const fields = [
+                    {l:'Categoría',    v: match.Categoría},
+                    {l:'Tier',         v: match.Tier},
+                    {l:'Votos a ganar',v: match.votos ? match.votos.toLocaleString() : '—'},
+                    {l:'Nº impactos',  v: match.impactos ?? '—'},
+                    {l:'Vía instituc.',v: match.instituc ?? '—'},
+                    {l:'Vol. impactos',v: match.volumen ? match.volumen.toLocaleString() : '—'},
+                  ];
+                  return (
+                    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:'1px',border:'1px solid var(--gray-5)',borderRadius:8,overflow:'hidden'}}>
+                      {fields.map(({l,v})=>(
+                        <div key={l} style={{padding:'12px 16px',background:'var(--white)',borderRight:'1px solid var(--gray-6)',borderBottom:'1px solid var(--gray-6)'}}>
+                          <div style={{fontSize:'.6rem',fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',color:'var(--gray-4)',marginBottom:4}}>{l}</div>
+                          <div style={{fontSize:'.9rem',fontWeight:600,color:'var(--black)'}}>{v || '—'}</div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })()}
+              </div>
             )}
               {tab==='insights'   && (
                 <div>
