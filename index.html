@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Campaña</title>
+  <title>Nanotargeting</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="Logo/nano-logo.png" />
-  <meta property="og:title" content="Sistema de Campaña" />
+  <meta property="og:title" content="Nanotargeting" />
   <meta property="og:description" content="Coordinación de campaña política" />
   <meta property="og:image" content="https://mty-azul.com/Logo/nano-logo.png" />
   <meta property="og:url" content="https://mty-azul.com" />
@@ -3393,7 +3393,7 @@ function App() {
   const [csvHeaders,setCsvHeaders]= useState([]);     // columns from file
   const [mapping,   setMapping]   = useState({});     // appField -> csvCol
   const [importStep,setImportStep]= useState('upload'); // 'upload'|'map'
-  const [campName, setCampName]   = useState('Mi Campã±a');
+  const [campName, setCampName]   = useState('Nanotargeting');
   const [editName, setEditName]   = useState(false);
   const [tmpName, setTmpName]     = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -3795,7 +3795,7 @@ function App() {
       {view === 'colonias' && (
         !loaded ? (
           <div className="empty-state">
-            <h2>Sistema de Campaña</h2>
+            <h2>Nanotargeting</h2>
             <p>Importa tu CSV con las colonias a visitar o usa los datos de ejemplo para explorar el sistema.</p>
             <div style={{width:'100%', maxWidth:'460px'}}>
               <label className="upload-zone">
