@@ -3396,6 +3396,8 @@ function App() {
   const [tmpName, setTmpName]     = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [view, setView] = useState('colonias');
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 50;
   const [team, setTeam] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [sprint, setSprint] = useState({ numero:1, objetivo:'', fechaInicio:'', fechaFin:'', taskReviews:{}, reviewNextActions:[], retroBien:'', retroMejorar:'' });
@@ -3610,6 +3612,13 @@ function App() {
     });
   }, [filtered]);
 
+  // Reset to page 1 when filter/search changes
+  const prevFilterRef = React.useRef(filter+search+sortBy);
+  if (prevFilterRef.current !== filter+search+sortBy) { prevFilterRef.current = filter+search+sortBy; setPage(1); }
+
+  const pagedFiltered = useMemo(() => filtered.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE), [filtered, page]);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+
   const total      = colonias.length;
   const visitadas  = colonias.filter(c=>c.estado==='visitada').length;
   const proceso    = colonias.filter(c=>c.estado==='proceso').length;
@@ -3799,24 +3808,37 @@ function App() {
           <div className="no-results">Sin resultados para esta búsqueda.</div>
         ) : (
           <div className="colonias-wrap">
-            {grouped.map(([tierKey, cols]) => (
-              <div key={tierKey} className="group-block">
-                <div className="colonia-list">
-                  {cols.map(col => <ColoniaRow key={col.id} col={col} onUpdate={upd} team={team} />)}
-                </div>
+            {pagedFiltered.map(col => <ColoniaRow key={col.id} col={col} onUpdate={upd} team={team} />)}
+            {totalPages > 1 && (
+              <div style={{display:'flex',alignItems:'center',justifyContent:'center',gap:12,padding:'24px 0',borderTop:'1px solid var(--gray-5)',marginTop:8}}>
+                <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1}
+                  style={{background:'none',border:'1px solid var(--gray-5)',borderRadius:6,padding:'5px 14px',fontFamily:'Quicksand,sans-serif',fontWeight:600,fontSize:'.8rem',cursor:page===1?'not-allowed':'pointer',color:page===1?'var(--gray-4)':'var(--black)'}}>
+                  ← Anterior
+                </button>
+                <span style={{fontSize:'.8rem',color:'var(--gray-3)',fontWeight:500}}>
+                  Página {page} de {totalPages} · {filtered.length} colonias
+                </span>
+                <button onClick={()=>setPage(p=>Math.min(totalPages,p+1))} disabled={page===totalPages}
+                  style={{background:'none',border:'1px solid var(--gray-5)',borderRadius:6,padding:'5px 14px',fontFamily:'Quicksand,sans-serif',fontWeight:600,fontSize:'.8rem',cursor:page===totalPages?'not-allowed':'pointer',color:page===totalPages?'var(--gray-4)':'var(--black)'}}>
+                  Siguiente →
+                </button>
               </div>
-            ))}
+            )}
           </div>
         )
       )}
 
       {/* Footer */}
-      {loaded && (
-        <div className="app-footer">
-          <span className="footer-text">{campName} — Sistema de Coordinación de Campaña</span>
-          <span className="footer-text">{visitadas} de {total} colonias visitadas · {impactosHechos}/{totalImpactos} impactos</span>
+      <div className="app-footer">
+        <div style={{display:'flex',flexDirection:'column',gap:2}}>
+          <span className="footer-text" style={{fontWeight:600,color:'var(--gray-3)'}}>Sprint · Novak Sapi de CV</span>
+          <span className="footer-text">Ave. Alfonso Reyes 21, Torre Ámbar 1 L–202, Vía Cordillera, San Pedro Garza García, 66233, México</span>
         </div>
-      )}
+        <div style={{display:'flex',flexDirection:'column',gap:2,textAlign:'right'}}>
+          <span className="footer-text"><a href="mailto:hola@novak.mx" style={{color:'inherit',textDecoration:'none'}}>hola@novak.mx</a></span>
+          <span className="footer-text"><a href="tel:+528140070075" style={{color:'inherit',textDecoration:'none'}}>+52 81 4007 0075</a></span>
+        </div>
+      </div>
 
       {/* Modal */}
       {showModal && (
