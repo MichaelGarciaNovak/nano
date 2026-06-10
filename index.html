@@ -3974,9 +3974,9 @@ function App() {
       {view === 'colonias' && (
         <div>
           {/* Territorial tabs */}
-          <div className="sprint-view-tabs" style={{borderBottom:'1px solid var(--gray-5)',background:'var(--white)',paddingLeft:28}}>
+          <div className="sprint-view-tabs">
             {[{k:'colonias',l:'Colonias'},{k:'resumen',l:'Resumen'},{k:'agenda',l:'Agenda'},{k:'carga',l:'Carga semanal'}].map(t=>(
-              <button key={t.k} className={`sprint-tab ${terriTab===t.k?'active':''}`} onClick={()=>setTerriTab(t.k)}>{t.l}</button>
+              <button key={t.k} className={`svt-btn ${terriTab===t.k?'active':''}`} onClick={()=>setTerriTab(t.k)}>{t.l}</button>
             ))}
           </div>
 
